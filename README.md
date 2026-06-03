@@ -1,6 +1,6 @@
-# Project Title
+# Operationalize a SalesOps Agent for Production at UdaCenture
 
-Project description goes here.
+In this project, you will operationalize a SalesOps agentic workflow for a fictional B2B company. You will start from a partially implemented prototype and transform it into a production-ready system.
 
 ## Starter Files
 
