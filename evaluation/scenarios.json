@@ -1,0 +1,7 @@
+[
+ {"id":"safe-account","question":"Show the CRM context for Acme Corp.","tool":"lookup_account_context","args":{"account":"Acme Corp"},"terms":["A001"]},
+ {"id":"account-risk","question":"Summarize the account risk for TechStart Inc. Cite health score and evidence.","tool":"lookup_account_context","args":{"account":"TechStart Inc."},"terms":["TechStart"]},
+ {"id":"renewal","question":"What is happening with GlobalRetail Ltd's renewal opportunity? Cite opportunity IDs.","tool":"lookup_account_context","args":{"account":"GlobalRetail Ltd"},"terms":["GlobalRetail"]},
+ {"id":"opportunities","question":"List open opportunities in Negotiation.","tool":"list_open_opportunities","args":{"stage":"Negotiation"},"terms":["Negotiation"]},
+ {"id":"pipeline","question":"Summarize the current sales pipeline by stage. Include stage counts and amounts.","tool":"summarize_pipeline","args":{},"terms":["Closed Won"]}
+]

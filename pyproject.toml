@@ -10,6 +10,7 @@ dev = ["pytest>=8,<10", "ruff>=0.11,<1", "nbclient>=0.10,<1", "ipykernel>=6,<8"]
 
 [project.scripts]
 salesops-agent = "salesops_agent.cli:main"
+evaluate = "salesops_agent.evaluation:main"
 
 [build-system]
 requires = ["hatchling"]
