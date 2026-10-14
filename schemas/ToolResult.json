@@ -1,0 +1,31 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "enum": [
+        "success",
+        "blocked",
+        "pending_approval",
+        "rejected",
+        "sent",
+        "failed"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "reason": {
+      "default": "",
+      "title": "Reason",
+      "type": "string"
+    },
+    "data": {
+      "default": null,
+      "title": "Data"
+    }
+  },
+  "required": [
+    "status"
+  ],
+  "title": "ToolResult",
+  "type": "object"
+}

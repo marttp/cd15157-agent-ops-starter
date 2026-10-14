@@ -1,0 +1,82 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "model": {
+      "title": "Model",
+      "type": "string"
+    },
+    "provider": {
+      "default": "vocareum",
+      "title": "Provider",
+      "type": "string"
+    },
+    "temperature": {
+      "maximum": 2,
+      "minimum": 0,
+      "title": "Temperature",
+      "type": "number"
+    },
+    "request_timeout_s": {
+      "exclusiveMinimum": 0,
+      "maximum": 120,
+      "title": "Request Timeout S",
+      "type": "number"
+    },
+    "max_model_calls": {
+      "maximum": 20,
+      "minimum": 1,
+      "title": "Max Model Calls",
+      "type": "integer"
+    },
+    "reference_date": {
+      "title": "Reference Date",
+      "type": "string"
+    },
+    "prompt": {
+      "title": "Prompt",
+      "type": "string"
+    },
+    "data_dir": {
+      "title": "Data Dir",
+      "type": "string"
+    },
+    "output_dir": {
+      "title": "Output Dir",
+      "type": "string"
+    },
+    "input_usd_per_million": {
+      "minimum": 0,
+      "title": "Input Usd Per Million",
+      "type": "number"
+    },
+    "output_usd_per_million": {
+      "minimum": 0,
+      "title": "Output Usd Per Million",
+      "type": "number"
+    },
+    "price_version": {
+      "title": "Price Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "version",
+    "model",
+    "temperature",
+    "request_timeout_s",
+    "max_model_calls",
+    "reference_date",
+    "prompt",
+    "data_dir",
+    "output_dir",
+    "input_usd_per_million",
+    "output_usd_per_million",
+    "price_version"
+  ],
+  "title": "Settings",
+  "type": "object"
+}

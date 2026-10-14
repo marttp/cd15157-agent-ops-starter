@@ -1,0 +1,28 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "enum": [
+        "allowed",
+        "blocked"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "reason": {
+      "title": "Reason",
+      "type": "string"
+    },
+    "policy": {
+      "default": "salesops-data-access-v1",
+      "title": "Policy",
+      "type": "string"
+    }
+  },
+  "required": [
+    "status",
+    "reason"
+  ],
+  "title": "Decision",
+  "type": "object"
+}
