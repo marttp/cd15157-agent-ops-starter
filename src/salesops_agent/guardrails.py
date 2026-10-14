@@ -1,11 +1,11 @@
-import json
 import re
 import unicodedata
-from .schemas import Decision
+
 from .run_context import basic_sanitize
+from .schemas import Decision
 
 PATTERNS = {
-    "executive_compensation": r"\b(?:ceo|cfo|executive)\b.{0,50}\b(?:bonus|pay|salary|compensation|equity)\b|salary_usd|equity_bonus|\bcompensation\b",
+    "executive_compensation": r"\b(?:ceo|cfo|executive)\b.{0,50}\b(?:bonus|pay|salary|compensation|equity)\b|salary_usd|equity_bonus|\bequity bonus\b|\bsalary\b|\bcompensation\b",
     "restricted_hr": r"internal.hr|\bhr data\b|\b(?:employee|staff)\b.{0,40}\b(?:performance|termination|fired|dismiss|pip)\b|\bperformance plan\b|\btermination\b|\bgetting fired\b",
     "confidential_ma": r"\bm\s*&\s*a\b|confidential_m_and_a|\bacquir(?:ing|e)\b|\bmerger\b|\bacquisition details\b",
     "confidential_layoffs": r"lay.?offs?|layoff_plan|planned_reduction",
@@ -60,6 +60,8 @@ def sanitize(value):
     if isinstance(value, list):
         return [sanitize(v) for v in value]
     if isinstance(value, str):
+        if value in {"lookup_internal_hr_data", "lookup_internal_financial_data"}:
+            return value
         value = basic_sanitize(value)
         if inspect_text(value).status == "blocked":
             return "[REDACTED: restricted content]"

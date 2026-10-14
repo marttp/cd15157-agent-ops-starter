@@ -1,5 +1,6 @@
 import pytest
 from pydantic import ValidationError
+
 from salesops_agent.config import load_settings, metadata
 from salesops_agent.schemas import Email
 

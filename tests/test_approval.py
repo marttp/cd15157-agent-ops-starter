@@ -1,7 +1,9 @@
 import json
 import sqlite3
-import pytest
 from pathlib import Path
+
+import pytest
+
 from salesops_agent.agent import run_agent
 from salesops_agent.data_access import CRM
 from salesops_agent.email_service import EmailService

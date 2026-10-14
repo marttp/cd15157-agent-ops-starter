@@ -1,5 +1,7 @@
 from pathlib import Path
+
 import pytest
+
 from salesops_agent.data_access import CRM
 from salesops_agent.email_service import EmailService
 from salesops_agent.tools import Dispatcher

@@ -1,5 +1,6 @@
 """Explicit scripted model double, only for offline boundary verification."""
 import json
+
 from langchain_core.messages import AIMessage, ToolMessage
 
 

@@ -1,16 +1,18 @@
 import json
 from typing import TypedDict
+
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
-from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.graph import END, START, StateGraph
+from langgraph.types import Command
+
+from .approvals import ApprovalGate
 from .config import load_settings, make_model, metadata
 from .data_access import CRM
 from .email_service import EmailService
-from .tools import Dispatcher
-from .run_context import RunContext
 from .guardrails import input_policy, output_policy, sanitize
-from .approvals import ApprovalGate
-from langgraph.types import Command
+from .run_context import RunContext
+from .tools import Dispatcher
 
 
 class State(TypedDict):
@@ -54,6 +56,7 @@ def build_graph(model, dispatcher, ctx, cfg, prompt):
 def run_agent(question, config=None, output=None, model=None, task_id=None, approval=None):
     cfg, root = load_settings(config)
     ctx = RunContext(output or root / cfg.output_dir, question, metadata(cfg, root), task_id, sanitizer=sanitize)
+    ctx.metadata["execution_mode"] = "scripted" if model is not None else "live"
     try:
         decision = input_policy(question)
         if decision.status == "blocked":
