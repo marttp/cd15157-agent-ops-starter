@@ -1,6 +1,7 @@
 from pydantic import ValidationError
 from .schemas import Contract, Email, ToolResult
 from .guardrails import tool_arguments_policy, sanitize
+from .sandbox import run_sandboxed
 
 
 class AccountArgs(Contract):
@@ -19,11 +20,15 @@ class DraftArgs(AccountArgs):
     purpose: str
 
 
+class AnalysisArgs(Contract):
+    code: str
+
+
 class Dispatcher:
     def __init__(self, crm, emails, emit=lambda *args: None):
         self.crm, self.emails, self.emit = crm, emails, emit
         self.contracts = {"lookup_account_context": AccountArgs, "list_open_opportunities": OpenArgs,
-                          "summarize_pipeline": EmptyArgs, "draft_email": DraftArgs, "send_email": Email}
+                          "summarize_pipeline": EmptyArgs, "draft_email": DraftArgs, "send_email": Email, "analyze_crm": AnalysisArgs}
 
     def call(self, name, arguments):
         self.emit("tool_attempt", {"name": name, "arguments": arguments})
@@ -37,6 +42,12 @@ class Dispatcher:
         if decision.status == "blocked":
             return self.block(name, decision.reason)
         try:
+            if name == "analyze_crm":
+                result = run_sandboxed(args.code, sanitize(self.crm.tables))
+                if result["status"] == "blocked":
+                    return self.block(name, result["reason"])
+                self.emit("tool_result", {"name": name, "result": result})
+                return result
             if name == "lookup_account_context":
                 data = self.crm.context(args.account)
             elif name == "list_open_opportunities":
@@ -63,7 +74,7 @@ class Dispatcher:
         return result
 
     def definitions(self):
-        descriptions = {"lookup_account_context": "Get CRM evidence for one named account or ID.",
+        descriptions = {"analyze_crm": "Run a bounded expression using count, sum, average, group_sum or filter_eq on approved CRM tables. No arbitrary Python.", "lookup_account_context": "Get CRM evidence for one named account or ID.",
                         "list_open_opportunities": "List open opportunities, optionally filtered by stage.",
                         "summarize_pipeline": "Count and sum opportunity value by stage.",
                         "draft_email": "Draft a follow-up email using the account's CRM contact.",
