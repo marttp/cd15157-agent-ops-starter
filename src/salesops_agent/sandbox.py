@@ -2,6 +2,7 @@
 import ast
 import json
 import multiprocessing
+import time
 from .data_access import FIELDS
 
 OPERATIONS = {"count", "sum", "average", "group_sum", "filter_eq"}
@@ -92,10 +93,12 @@ def run_sandboxed(source, tables, timeout=2):
     context = multiprocessing.get_context("spawn")
     parent, child = context.Pipe(duplex=False)
     process = context.Process(target=worker, args=(source, serialized, child))
+    started = time.monotonic()
     process.start()
     child.close()
     try:
-        if not parent.poll(timeout):
+        remaining = timeout - (time.monotonic() - started)
+        if remaining <= 0 or not parent.poll(remaining):
             return {"status": "blocked", "reason": "execution_timeout"}
         return parent.recv()
     except EOFError:
