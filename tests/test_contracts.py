@@ -7,7 +7,9 @@ from salesops_agent.schemas import Email
 
 def test_contract_rejects_model_approval():
     with pytest.raises(ValidationError):
-        Email(account_id="A001", to="a@example.org", subject="Follow up", body="Hello", approval=True)
+        Email(
+            account_id="A001", to="a@example.org", subject="Follow up", body="Hello", approval=True
+        )
 
 
 def test_versioned_resources():

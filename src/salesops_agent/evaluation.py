@@ -24,10 +24,18 @@ def select(value, path):
 def check_case(case, result, trace):
     if result["status"] != case.get("status", "success"):
         return "unexpected_runtime_status"
-    if case.get("layer") and not any(e["kind"] == "guardrail" and e["data"]["layer"] == case["layer"] for e in trace["events"]):
+    if case.get("layer") and not any(
+        e["kind"] == "guardrail" and e["data"]["layer"] == case["layer"] for e in trace["events"]
+    ):
         return "missing_guardrail_evidence"
     if case.get("tool") and case.get("status", "success") == "success":
-        events = [e for e in trace["events"] if e["kind"] == "tool_result" and e["data"]["name"] == case["tool"] and e["data"]["result"]["status"] in {"success", "sent"}]
+        events = [
+            e
+            for e in trace["events"]
+            if e["kind"] == "tool_result"
+            and e["data"]["name"] == case["tool"]
+            and e["data"]["result"]["status"] in {"success", "sent"}
+        ]
         if not events:
             return "expected_tool_not_executed"
         for assertion in case.get("assertions", []):
@@ -51,18 +59,36 @@ def evaluate(offline=False, output=None, baseline=None):
     for case in cases:
         case_output = output / "evaluation-runs" / case["id"]
         kind = case.get("kind", "live")
-        mode = "offline-scripted" if kind == "live" and offline else "live" if kind == "live" else "fault-injection"
+        mode = (
+            "offline-scripted"
+            if kind == "live" and offline
+            else "live"
+            if kind == "live"
+            else "fault-injection"
+        )
         args = case.get("args", {})
         if kind == "email":
             crm = CRM(root / "data")
-            args = EmailService(case_output / "draft.db", crm).draft("Acme Corp", "next steps").model_dump()
+            args = (
+                EmailService(case_output / "draft.db", crm)
+                .draft("Acme Corp", "next steps")
+                .model_dump()
+            )
         if kind == "error":
             model = FailingModel()
         elif kind == "live" and not offline:
             model = None
         else:
-            model = ScriptedModel([(case["tool"], args)] if case.get("tool") else [], final=case.get("final"))
-        result = run_agent(case["question"], output=case_output, model=model, task_id=case["id"], approval=case.get("approval"))
+            model = ScriptedModel(
+                [(case["tool"], args)] if case.get("tool") else [], final=case.get("final")
+            )
+        result = run_agent(
+            case["question"],
+            output=case_output,
+            model=model,
+            task_id=case["id"],
+            approval=case.get("approval"),
+        )
         trace = json.loads((case_output / "traces" / f"{result['run_id']}.json").read_text())
         failure = check_case(case, result, trace)
         if kind == "email":
@@ -78,26 +104,53 @@ def evaluate(offline=False, output=None, baseline=None):
         (output / "logs").mkdir(parents=True, exist_ok=True)
         (output / "traces").mkdir(parents=True, exist_ok=True)
         with (output / "logs/runs.jsonl").open("a") as f:
-            f.write(json.dumps(result["record"])+"\n")
-        (output / "traces" / f"{result['run_id']}.json").write_text(json.dumps(trace, indent=2)+"\n")
-        rows.append({"task_id": case["id"], "run_id": result["run_id"], "mode": mode,
-                     "expected_status": case.get("status", "success"), "observed_status": result["status"],
-                     "passed": failure is None, "latency_s": result["record"]["latency_s"],
-                     "estimated_cost_usd": result["record"]["estimated_cost_usd"], "usage": result["record"]["usage"],
-                     "versions": result["record"]["metadata"],
-                     "runtime_failure_reason": result["record"]["failure_reason"], "failure_reason": failure})
+            f.write(json.dumps(result["record"]) + "\n")
+        (output / "traces" / f"{result['run_id']}.json").write_text(
+            json.dumps(trace, indent=2) + "\n"
+        )
+        rows.append(
+            {
+                "task_id": case["id"],
+                "run_id": result["run_id"],
+                "mode": mode,
+                "expected_status": case.get("status", "success"),
+                "observed_status": result["status"],
+                "passed": failure is None,
+                "latency_s": result["record"]["latency_s"],
+                "estimated_cost_usd": result["record"]["estimated_cost_usd"],
+                "usage": result["record"]["usage"],
+                "versions": result["record"]["metadata"],
+                "runtime_failure_reason": result["record"]["failure_reason"],
+                "failure_reason": failure,
+            }
+        )
     reports = output / "reports"
     reports.mkdir(parents=True, exist_ok=True)
-    (reports / "evaluation_report.json").write_text(json.dumps(rows, indent=2)+"\n")
-    lines = ["# Evaluation report", "", "Offline/scripted cases prove controls, not live model behavior. Cost rates are illustrative; unknown usage is null.", "",
-             "| Task | Mode | Passed | Latency s | Estimated USD | Failure |", "| --- | --- | --- | --- | --- | --- |"]
-    lines += [f"| {r['task_id']} | {r['mode']} | {r['passed']} | {r['latency_s']:.4f} | {r['estimated_cost_usd']} | {r['failure_reason']} |" for r in rows]
+    (reports / "evaluation_report.json").write_text(json.dumps(rows, indent=2) + "\n")
+    lines = [
+        "# Evaluation report",
+        "",
+        "Offline/scripted cases prove controls, not live model behavior. Cost rates are illustrative; unknown usage is null.",
+        "",
+        "| Task | Mode | Passed | Latency s | Estimated USD | Failure |",
+        "| --- | --- | --- | --- | --- | --- |",
+    ]
+    lines += [
+        f"| {r['task_id']} | {r['mode']} | {r['passed']} | {r['latency_s']:.4f} | {r['estimated_cost_usd']} | {r['failure_reason']} |"
+        for r in rows
+    ]
     if baseline:
         previous = {r["task_id"]: r for r in json.loads(Path(baseline).read_text())}
-        regressions = [r["task_id"] for r in rows if previous.get(r["task_id"], {}).get("passed") and not r["passed"]]
-        (reports / "regression_report.json").write_text(json.dumps({"regressions": regressions}, indent=2)+"\n")
+        regressions = [
+            r["task_id"]
+            for r in rows
+            if previous.get(r["task_id"], {}).get("passed") and not r["passed"]
+        ]
+        (reports / "regression_report.json").write_text(
+            json.dumps({"regressions": regressions}, indent=2) + "\n"
+        )
         lines += ["", "Regressions against supplied baseline: " + json.dumps(regressions)]
-    (reports / "evaluation_report.md").write_text("\n".join(lines)+"\n")
+    (reports / "evaluation_report.md").write_text("\n".join(lines) + "\n")
     generate(output)
     return rows
 

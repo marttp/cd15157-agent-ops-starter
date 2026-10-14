@@ -26,15 +26,29 @@ class AnalysisArgs(Contract):
 
 
 class Dispatcher:
-    def __init__(self, crm, emails, emit=lambda *args: None):
+    def __init__(self, crm, emails, emit=lambda *args: None, allow_send=False):
         self.crm, self.emails, self.emit = crm, emails, emit
-        self.contracts = {"lookup_account_context": AccountArgs, "list_open_opportunities": OpenArgs,
-                          "summarize_pipeline": EmptyArgs, "draft_email": DraftArgs, "send_email": Email, "analyze_crm": AnalysisArgs}
+        self.allow_send, self.attempts = allow_send, 0
+        self.contracts = {
+            "lookup_account_context": AccountArgs,
+            "list_open_opportunities": OpenArgs,
+            "summarize_pipeline": EmptyArgs,
+            "draft_email": DraftArgs,
+            "send_email": Email,
+            "analyze_crm": AnalysisArgs,
+        }
 
     def call(self, name, arguments):
+        self.attempts += 1
+        if self.attempts > 32:
+            return self.block(name, "tool_call_limit")
+        if name == "send_email" and not self.allow_send:
+            return self.block(name, "unrequested_email_action")
         self.emit("tool_attempt", {"name": name, "arguments": arguments})
         if name not in self.contracts:
-            return self.block(name, "restricted_internal_data" if "internal" in name else "unknown_tool")
+            return self.block(
+                name, "restricted_internal_data" if "internal" in name else "unknown_tool"
+            )
         try:
             args = self.contracts[name].model_validate(arguments)
         except ValidationError:
@@ -77,10 +91,22 @@ class Dispatcher:
         return result
 
     def definitions(self):
-        descriptions = {"analyze_crm": "Run a bounded expression using count, sum, average, group_sum or filter_eq on approved CRM tables. No arbitrary Python.", "lookup_account_context": "Get CRM evidence for one named account or ID.",
-                        "list_open_opportunities": "List open opportunities, optionally filtered by stage.",
-                        "summarize_pipeline": "Count and sum opportunity value by stage.",
-                        "draft_email": "Draft a follow-up email using the account's CRM contact.",
-                        "send_email": "Finalize and fake-send an email, subject to approval."}
-        return [{"type": "function", "function": {"name": name, "description": descriptions[name],
-                "parameters": contract.model_json_schema()}} for name, contract in self.contracts.items()]
+        descriptions = {
+            "analyze_crm": "Run a bounded expression using count, sum, average, group_sum or filter_eq on approved CRM tables. No arbitrary Python.",
+            "lookup_account_context": "Get CRM evidence for one named account or ID.",
+            "list_open_opportunities": "List open opportunities, optionally filtered by stage.",
+            "summarize_pipeline": "Count and sum opportunity value by stage.",
+            "draft_email": "Draft a follow-up email using the account's CRM contact.",
+            "send_email": "Finalize and fake-send an email, subject to approval.",
+        }
+        return [
+            {
+                "type": "function",
+                "function": {
+                    "name": name,
+                    "description": descriptions[name],
+                    "parameters": contract.model_json_schema(),
+                },
+            }
+            for name, contract in self.contracts.items()
+        ]

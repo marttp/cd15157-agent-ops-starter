@@ -14,7 +14,9 @@ FIELDS = {
 
 def normalize(text):
     text = re.sub(r"[^a-z0-9 ]", " ", text.lower())
-    return " ".join(w for w in text.split() if w not in {"inc", "corp", "ltd", "llc", "corporation"})
+    return " ".join(
+        w for w in text.split() if w not in {"inc", "corp", "ltd", "llc", "corporation"}
+    )
 
 
 class CRM:
@@ -23,15 +25,25 @@ class CRM:
         for name, fields in FIELDS.items():
             rows = json.loads((Path(directory) / f"{name}.json").read_text())
             self.tables[name] = [{k: row[k] for k in fields.split() if k in row} for row in rows]
-        self.customer_ids = {o["account_id"] for o in self.tables["opportunities"] if o["stage"] == "Closed Won"}
+        self.customer_ids = {
+            o["account_id"] for o in self.tables["opportunities"] if o["stage"] == "Closed Won"
+        }
         for account in self.tables["accounts"]:
-            account["account_status"] = "customer" if account["account_id"] in self.customer_ids else account["account_status"]
+            account["account_status"] = (
+                "customer"
+                if account["account_id"] in self.customer_ids
+                else account["account_status"]
+            )
 
     def resolve(self, query):
         if not query.strip():
             raise ValueError("account_required")
         rows = self.tables["accounts"]
-        exact = [a for a in rows if a["account_id"].lower() == query.lower() or normalize(a["name"]) == normalize(query)]
+        exact = [
+            a
+            for a in rows
+            if a["account_id"].lower() == query.lower() or normalize(a["name"]) == normalize(query)
+        ]
         matches = exact or [a for a in rows if normalize(query) in normalize(a["name"])]
         if len(matches) != 1:
             raise ValueError("account_ambiguous" if matches else "account_not_found")
@@ -44,11 +56,20 @@ class CRM:
         for name, rows in self.tables.items():
             if name == "accounts":
                 continue
-            result[name] = [r for r in rows if r["account_id"] == aid] if name not in {"support_tickets", "product_usage"} or aid in self.customer_ids else []
+            result[name] = (
+                [r for r in rows if r["account_id"] == aid]
+                if name not in {"support_tickets", "product_usage"} or aid in self.customer_ids
+                else []
+            )
         return result
 
     def open_opportunities(self, stage=None):
-        return [o for o in self.tables["opportunities"] if o["stage"] not in {"Closed Won", "Closed Lost"} and (not stage or o["stage"].lower() == stage.lower())]
+        return [
+            o
+            for o in self.tables["opportunities"]
+            if o["stage"] not in {"Closed Won", "Closed Lost"}
+            and (not stage or o["stage"].lower() == stage.lower())
+        ]
 
     def pipeline(self):
         result = {}

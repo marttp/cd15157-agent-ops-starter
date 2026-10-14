@@ -1,0 +1,26 @@
+{
+  "source_commit": "b3f96c95f391602ae56d224d09542fb5a7ed01c4",
+  "clean_clone": true,
+  "python": "3.13.7",
+  "uv": "0.11.0",
+  "locked_sync": "passed",
+  "tests_passed": 53,
+  "offline_evaluation_passed": 32,
+  "offline_evaluation_total": 32,
+  "verified_trace_log_pairs": 32,
+  "lint": "passed",
+  "format": "passed",
+  "hosted_ci": [
+    {
+      "url": "https://github.com/marttp/cd15157-agent-ops-starter/actions/runs/38511753814",
+      "conclusion": "success"
+    },
+    {
+      "url": "https://github.com/marttp/cd15157-agent-ops-starter/actions/runs/38511753422",
+      "conclusion": "success"
+    }
+  ],
+  "live_evaluation": "pending_provider_credentials",
+  "prototype_execution": "pending_provider_credentials",
+  "docker_execution": "unavailable_local_daemon"
+}

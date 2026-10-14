@@ -3,6 +3,7 @@ import getpass
 import json
 import os
 from pathlib import Path
+
 from .agent import run_agent
 from .config import load_settings
 from .state import StateStore
@@ -44,8 +45,14 @@ def main():
     if args.command == "ask":
         if args.session and principal is None:
             parser.error("--session requires authenticated --user")
-        result = run_agent(args.question, args.config, output, approval=args.approval,
-                           principal=principal, session_id=args.session)
+        result = run_agent(
+            args.question,
+            args.config,
+            output,
+            approval=args.approval,
+            principal=principal,
+            session_id=args.session,
+        )
         print(json.dumps({k: result[k] for k in ["run_id", "status", "answer"]}, indent=2))
         raise SystemExit(1 if result["status"] == "failed" else 0)
     if args.command == "create-session":

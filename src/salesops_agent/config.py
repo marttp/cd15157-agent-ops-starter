@@ -5,12 +5,13 @@ from pathlib import Path
 
 import yaml
 from dotenv import load_dotenv
-from pydantic import Field
+from pydantic import Field, PrivateAttr
 
 from .schemas import Contract
 
 
 class Settings(Contract):
+    _source: Path = PrivateAttr()
     version: str
     model: str
     provider: str = "vocareum"
@@ -29,6 +30,7 @@ class Settings(Contract):
 def load_settings(path=None):
     path = Path(path or "config/agent_v1.yaml").resolve()
     cfg = Settings.model_validate(yaml.safe_load(path.read_text()))
+    cfg._source = path
     root = path.parent.parent
     load_dotenv(root / ".env", override=False)
     return cfg, root
@@ -39,19 +41,32 @@ def digest(path):
 
 
 def metadata(cfg, root):
-    commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root,
-                            capture_output=True, text=True).stdout.strip() or "unknown"
-    return {"git_commit": commit, "config_version": cfg.version,
-            "config_sha256": digest(root / "config/agent_v1.yaml"),
-            "prompt_sha256": digest(root / cfg.prompt), "prompt_version": "system-v1",
-            "effective_config": cfg.model_dump(), "schema_version": "schemas-v1", "tool_version": "tools-v1",
-            "dataset_sha256": {p.name: digest(p) for p in sorted((root / cfg.data_dir).glob("*.json"))},
-            "provider": os.getenv("LLM_PROVIDER", cfg.provider), "model": cfg.model,
-            "reference_date": cfg.reference_date, "price_version": cfg.price_version}
+    commit = (
+        subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=root, capture_output=True, text=True, check=False
+        ).stdout.strip()
+        or "unknown"
+    )
+    return {
+        "git_commit": commit,
+        "config_version": cfg.version,
+        "config_sha256": digest(cfg._source),
+        "prompt_sha256": digest(root / cfg.prompt),
+        "prompt_version": "system-v1",
+        "effective_config": cfg.model_dump(),
+        "schema_version": "schemas-v1",
+        "tool_version": "tools-v1",
+        "dataset_sha256": {p.name: digest(p) for p in sorted((root / cfg.data_dir).glob("*.json"))},
+        "provider": os.getenv("LLM_PROVIDER", cfg.provider),
+        "model": cfg.model,
+        "reference_date": cfg.reference_date,
+        "price_version": cfg.price_version,
+    }
 
 
 def make_model(cfg):
     from langchain_openai import ChatOpenAI
+
     provider = os.getenv("LLM_PROVIDER", cfg.provider)
     if provider not in {"vocareum", "openai"}:
         raise ValueError("unsupported_provider")
@@ -59,5 +74,11 @@ def make_model(cfg):
     if not key:
         raise RuntimeError("provider_credentials_missing")
     kwargs = {"base_url": "https://openai.vocareum.com/v1"} if provider == "vocareum" else {}
-    return ChatOpenAI(model=cfg.model, api_key=key, temperature=cfg.temperature,
-                      timeout=cfg.request_timeout_s, max_retries=0, **kwargs)
+    return ChatOpenAI(
+        model=cfg.model,
+        api_key=key,
+        temperature=cfg.temperature,
+        timeout=cfg.request_timeout_s,
+        max_retries=0,
+        **kwargs,
+    )
