@@ -1,8 +1,8 @@
 # Implementation PR history
 
 Every PR uses What / Why / Change with a 100–200 word description. Implementation
-branches use `codex/agentops-*` in a dedicated worktree. PRs 1–9 are merged; packaging
-and submission documentation are the next PR. Course patterns are mapped in the plan.
+branches use `codex/agentops-*` in a dedicated worktree. PRs 1–9 are merged. PR 10 packages the implementation, documentation and observed
+offline evidence; its GitHub page records current merge status. Course patterns are mapped in the plan.
 
 | PR | Scope | Verification before merge |
 | --- | --- | --- |
@@ -15,6 +15,7 @@ and submission documentation are the next PR. Course patterns are mapped in the 
 | [7](https://github.com/marttp/cd15157-agent-ops-starter/pull/7) | Content-bound HITL | Approve/reject/pause, duplicate write and bypass denial |
 | [8](https://github.com/marttp/cd15157-agent-ops-starter/pull/8) | Monitoring and expanded evaluation | 48 checks, 32 offline scenarios, metric reconciliation |
 | [9](https://github.com/marttp/cd15157-agent-ops-starter/pull/9) | Owned SQLite memory/replay | Password check, same-user resume, cross-user denial |
+| [10](https://github.com/marttp/cd15157-agent-ops-starter/pull/10) | Packaging, CI, README, audit and offline evidence | Clean clone: 53 tests, 32 scenarios, 32 artifact pairs; hosted CI green |
 
 PR 6 remained unmerged until its timeout test passed. GitHub briefly rejected merging
 an updated PR head; the final head was verified and merged before proceeding. Source

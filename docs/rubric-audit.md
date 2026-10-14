@@ -70,8 +70,8 @@ Tests verify another user's session list is empty, direct session/run reads fail
 and the owner resumes memory after reopening SQLite. Full durable LangGraph graph
 checkpoints and cross-process pending-approval resume are not claimed.
 
-GitHub Actions is included as an offline gate. Hosted CI status is recorded separately
-after the PR runs. Dockerfile packaging is included. The local Docker daemon is not
+GitHub Actions is included as an offline gate. Hosted CI passed on the packaging source commit.
+See reports/evidence/validation-summary.json for run links and exact source version. Dockerfile packaging is included. The local Docker daemon is not
 running, so container build/run has not been verified. Neither Docker execution nor
 external observability is a required rubric item.
 
@@ -83,3 +83,12 @@ export sanitized live evidence, and update pending rows based on observed result
 Failures must be fixed and re-evaluated before marking those rows verified. The
 provider token must never appear in exports or Git. Offline checks cannot close
 these live rows.
+
+## Observed verification snapshot
+
+Clean-clone source commit `b3f96c95f391602ae56d224d09542fb5a7ed01c4` passed locked
+installation with uv 0.11.0 and Python 3.13.7, all 53 unit/integration checks, lint and
+formatting, all 32 offline evaluation cases, and reconciliation of 32 trace/log pairs.
+Selected sanitized artifacts are stored in reports/evidence/. Evidence is from the
+committed implementation before the evidence snapshot commit, so its version metadata
+remains truthful. Live-provider and container execution status are unchanged.

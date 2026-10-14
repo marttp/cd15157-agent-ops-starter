@@ -1,0 +1,112 @@
+{
+  "total_runs": 32,
+  "status_counts": {
+    "success": 7,
+    "blocked": 22,
+    "pending_approval": 1,
+    "rejected": 1,
+    "failed": 1
+  },
+  "success_rate": 0.21875,
+  "failure_rate": 0.03125,
+  "average_latency_s": 0.023573559970827773,
+  "p95_latency_s": 0.04465391702251509,
+  "estimated_total_known_cost_usd": 0.0,
+  "estimated_average_known_cost_usd": 0.0,
+  "known_cost_runs": 7,
+  "unknown_cost_runs": 25,
+  "tool_call_counts": {
+    "lookup_account_context": 3,
+    "list_open_opportunities": 1,
+    "summarize_pipeline": 1,
+    "analyze_crm": 1,
+    "send_email": 1
+  },
+  "tool_attempt_counts": {
+    "lookup_account_context": 3,
+    "list_open_opportunities": 1,
+    "summarize_pipeline": 1,
+    "lookup_internal_hr_data": 1,
+    "lookup_internal_financial_data": 1,
+    "finalize_email": 1,
+    "analyze_crm": 7,
+    "send_email": 5
+  },
+  "guardrail_blocks": 22,
+  "hitl_approvals": 1,
+  "hitl_rejections": 1,
+  "common_failure_reasons": {
+    "executive_compensation": 2,
+    "restricted_hr": 4,
+    "confidential_ma": 2,
+    "confidential_layoffs": 2,
+    "confidential_strategy": 2,
+    "prompt_injection": 1,
+    "restricted_internal_data": 2,
+    "unknown_tool": 1,
+    "unsafe_commitment": 1,
+    "unsafe_analysis_request": 5,
+    "human_rejected": 1,
+    "TimeoutError": 1
+  },
+  "execution_modes": {
+    "scripted": 32
+  },
+  "metrics_by_execution_mode": {
+    "scripted": {
+      "total_runs": 32,
+      "status_counts": {
+        "success": 7,
+        "blocked": 22,
+        "pending_approval": 1,
+        "rejected": 1,
+        "failed": 1
+      },
+      "success_rate": 0.21875,
+      "failure_rate": 0.03125,
+      "average_latency_s": 0.023573559970827773,
+      "p95_latency_s": 0.04465391702251509,
+      "estimated_total_known_cost_usd": 0.0,
+      "estimated_average_known_cost_usd": 0.0,
+      "known_cost_runs": 7,
+      "unknown_cost_runs": 25,
+      "tool_call_counts": {
+        "lookup_account_context": 3,
+        "list_open_opportunities": 1,
+        "summarize_pipeline": 1,
+        "analyze_crm": 1,
+        "send_email": 1
+      },
+      "tool_attempt_counts": {
+        "lookup_account_context": 3,
+        "list_open_opportunities": 1,
+        "summarize_pipeline": 1,
+        "lookup_internal_hr_data": 1,
+        "lookup_internal_financial_data": 1,
+        "finalize_email": 1,
+        "analyze_crm": 7,
+        "send_email": 5
+      },
+      "guardrail_blocks": 22,
+      "hitl_approvals": 1,
+      "hitl_rejections": 1,
+      "common_failure_reasons": {
+        "executive_compensation": 2,
+        "restricted_hr": 4,
+        "confidential_ma": 2,
+        "confidential_layoffs": 2,
+        "confidential_strategy": 2,
+        "prompt_injection": 1,
+        "restricted_internal_data": 2,
+        "unknown_tool": 1,
+        "unsafe_commitment": 1,
+        "unsafe_analysis_request": 5,
+        "human_rejected": 1,
+        "TimeoutError": 1
+      },
+      "execution_modes": {
+        "scripted": 32
+      }
+    }
+  }
+}

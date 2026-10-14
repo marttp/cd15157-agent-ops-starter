@@ -1,0 +1,274 @@
+{
+  "run_id": "89415751-e988-4f34-92da-a6c9b6f2bbd5",
+  "timestamp": "2026-10-14T04:31:17.530486+00:00",
+  "input": "Show the CRM context for Acme Corp. Use lookup_account_context and include the account ID and health score.",
+  "metadata": {
+    "git_commit": "b3f96c95f391602ae56d224d09542fb5a7ed01c4",
+    "config_version": "config-v1",
+    "config_sha256": "10ba52d39e64d777536261d84b9cd900975c628c4a47ea9fc0acd959450a16e9",
+    "prompt_sha256": "3e25861a945f5b7723fee0c6afd14cbc1e30e1aba0886c08176e88eb17b61264",
+    "prompt_version": "system-v1",
+    "effective_config": {
+      "version": "config-v1",
+      "model": "gpt-4o-mini",
+      "provider": "vocareum",
+      "temperature": 0.0,
+      "request_timeout_s": 45.0,
+      "max_model_calls": 8,
+      "reference_date": "2026-03-01",
+      "prompt": "prompts/system_v1.md",
+      "data_dir": "data",
+      "output_dir": ".",
+      "input_usd_per_million": 0.15,
+      "output_usd_per_million": 0.6,
+      "price_version": "illustrative-gpt4o-mini-v1"
+    },
+    "schema_version": "schemas-v1",
+    "tool_version": "tools-v1",
+    "dataset_sha256": {
+      "accounts.json": "3b25bedd5698de4d51e94a0b8a0c72193ba69d5365b6e49c2d295e70abbe8224",
+      "activities.json": "6600aead5973fb3ca9d0e07f24c34d68a92e4e9efca462f85817e5f34fbf300f",
+      "contacts.json": "8167cb7276f7afec06440e73dd34d4d57c8b0f636c254afffce3947a76f115e2",
+      "email_outbox.json": "4c91fef9d6c3bc55f9e4d8db3294f7c155697da57dd74e147ca960232aa5adc8",
+      "internal_financial_data.json": "d8e20c9b5a1878e06b9984c9dc567b57e9971d3438162a1563c15e088357c750",
+      "internal_hr_data.json": "c60692898d5547e28ed517e08441a4ab4c4c5d65a5eb957675e86d31e948443e",
+      "opportunities.json": "5314f8046b3be105658ac8d3f0d73fb0636c943c9ad4657e1f67890654c129d4",
+      "product_usage.json": "3fc2f1e1df6568022b8eae9fa9061cba4944dd74c1f4fe987e822cafe73742ce",
+      "support_tickets.json": "59b5c60672a3c36e05cc616f3c05b7aa89ed0b3c16be5f2f8b5eba2f3c49aca7"
+    },
+    "provider": "vocareum",
+    "model": "gpt-4o-mini",
+    "reference_date": "2026-03-01",
+    "price_version": "illustrative-gpt4o-mini-v1",
+    "execution_mode": "scripted"
+  },
+  "events": [
+    {
+      "sequence": 0,
+      "timestamp": "2026-10-14T04:31:17.531530+00:00",
+      "kind": "guardrail_decision",
+      "data": {
+        "layer": "input",
+        "status": "allowed",
+        "reason": "salesops_allowed",
+        "policy": "salesops-data-access-v1"
+      }
+    },
+    {
+      "sequence": 1,
+      "timestamp": "2026-10-14T04:31:17.537269+00:00",
+      "kind": "model",
+      "data": {
+        "model": "gpt-4o-mini",
+        "usage": null,
+        "tool_calls": [
+          {
+            "name": "lookup_account_context",
+            "args": {
+              "account": "Acme Corp"
+            },
+            "id": "call_0",
+            "type": "tool_call"
+          }
+        ],
+        "output": ""
+      }
+    },
+    {
+      "sequence": 2,
+      "timestamp": "2026-10-14T04:31:17.538198+00:00",
+      "kind": "tool_attempt",
+      "data": {
+        "name": "lookup_account_context",
+        "arguments": {
+          "account": "Acme Corp"
+        }
+      }
+    },
+    {
+      "sequence": 3,
+      "timestamp": "2026-10-14T04:31:17.539570+00:00",
+      "kind": "tool_result",
+      "data": {
+        "name": "lookup_account_context",
+        "result": {
+          "status": "success",
+          "reason": "",
+          "data": {
+            "account": {
+              "account_id": "A001",
+              "name": "Acme Corp",
+              "account_status": "customer",
+              "segment": "Strategic",
+              "industry": "Manufacturing",
+              "region": "North America",
+              "account_owner": "Maya Chen",
+              "health_score": 72,
+              "contract_start": "2025-06-01",
+              "contract_end": "2026-08-31",
+              "arr_usd": 750000,
+              "notes": "Strategic account. Expansion interest from operations team."
+            },
+            "contacts": [
+              {
+                "contact_id": "P0001",
+                "account_id": "A001",
+                "first_name": "Omar",
+                "last_name": "Stone",
+                "title": "Revenue Operations Lead",
+                "email": "omar.stone@acmecorp.example.com",
+                "is_primary": true,
+                "relationship_status": "engaged"
+              },
+              {
+                "contact_id": "P0002",
+                "account_id": "A001",
+                "first_name": "Lena",
+                "last_name": "Davis",
+                "title": "Procurement Manager",
+                "email": "lena.davis@acmecorp.example.com",
+                "is_primary": false,
+                "relationship_status": "engaged"
+              },
+              {
+                "contact_id": "P0003",
+                "account_id": "A001",
+                "first_name": "Taylor",
+                "last_name": "Brown",
+                "title": "Revenue Operations Lead",
+                "email": "taylor.brown@acmecorp.example.com",
+                "is_primary": false,
+                "relationship_status": "engaged"
+              }
+            ],
+            "opportunities": [
+              {
+                "opportunity_id": "OPP0001",
+                "account_id": "A001",
+                "name": "Acme Corp Initial Conversion",
+                "type": "new_business",
+                "stage": "Closed Won",
+                "amount_usd": 750000,
+                "close_date": "2025-02-07",
+                "probability": 100,
+                "next_step": "Customer onboarded",
+                "notes": "Initial opportunity successfully converted into a customer."
+              },
+              {
+                "opportunity_id": "OPP0002",
+                "account_id": "A001",
+                "name": "Acme Corp Expansion Opportunity",
+                "type": "expansion",
+                "stage": "Stalled",
+                "amount_usd": 180000,
+                "close_date": "2026-12-27",
+                "probability": 25,
+                "next_step": "Confirm renewal scope",
+                "notes": "Budget timing is a concern."
+              },
+              {
+                "opportunity_id": "OPP0003",
+                "account_id": "A001",
+                "name": "Acme Corp Renewal Opportunity",
+                "type": "renewal",
+                "stage": "Qualification",
+                "amount_usd": 50000,
+                "close_date": "2026-09-07",
+                "probability": 35,
+                "next_step": "Executive alignment",
+                "notes": "Requires technical validation."
+              },
+              {
+                "opportunity_id": "OPP0004",
+                "account_id": "A001",
+                "name": "Acme Corp Expansion Opportunity",
+                "type": "expansion",
+                "stage": "Qualification",
+                "amount_usd": 120000,
+                "close_date": "2026-10-31",
+                "probability": 35,
+                "next_step": "Confirm renewal scope",
+                "notes": "Decision process is unclear."
+              }
+            ],
+            "activities": [
+              {
+                "activity_id": "ACT0096",
+                "account_id": "A001",
+                "date": "2026-05-05",
+                "type": "meeting",
+                "owner": "Rafael Costa",
+                "summary": "No response to last outreach.",
+                "sentiment": "negative"
+              },
+              {
+                "activity_id": "ACT0097",
+                "account_id": "A001",
+                "date": "2026-04-02",
+                "type": "email",
+                "owner": "Ethan Miller",
+                "summary": "Stakeholder asked for customer references.",
+                "sentiment": "negative"
+              },
+              {
+                "activity_id": "ACT0098",
+                "account_id": "A001",
+                "date": "2026-04-07",
+                "type": "meeting",
+                "owner": "Ethan Miller",
+                "summary": "No response to last outreach.",
+                "sentiment": "positive"
+              },
+              {
+                "activity_id": "ACT0099",
+                "account_id": "A001",
+                "date": "2026-02-15",
+                "type": "call",
+                "owner": "Ethan Miller",
+                "summary": "Stakeholder asked for customer references.",
+                "sentiment": "neutral"
+              }
+            ],
+            "support_tickets": [],
+            "product_usage": [
+              {
+                "usage_id": "U0001",
+                "account_id": "A001",
+                "period": "2026-04",
+                "active_users": 343,
+                "monthly_logins": 2614,
+                "usage_trend": "up",
+                "feature_adoption_score": 21
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "sequence": 4,
+      "timestamp": "2026-10-14T04:31:17.541401+00:00",
+      "kind": "model",
+      "data": {
+        "model": "gpt-4o-mini",
+        "usage": null,
+        "tool_calls": [],
+        "output": "[\"{\\\"status\\\": \\\"success\\\", \\\"reason\\\": \\\"\\\", \\\"data\\\": {\\\"account\\\": {\\\"account_id\\\": \\\"A001\\\", \\\"name\\\": \\\"Acme Corp\\\", \\\"account_status\\\": \\\"customer\\\", \\\"segment\\\": \\\"Strategic\\\", \\\"industry\\\": \\\"Manufacturing\\\", \\\"region\\\": \\\"North America\\\", \\\"account_owner\\\": \\\"Maya Chen\\\", \\\"health_score\\\": 72, \\\"contract_start\\\": \\\"2025-06-01\\\", \\\"contract_end\\\": \\\"2026-08-31\\\", \\\"arr_usd\\\": 750000, \\\"notes\\\": \\\"Strategic account. Expansion interest from operations team.\\\"}, \\\"contacts\\\": [{\\\"contact_id\\\": \\\"P0001\\\", \\\"account_id\\\": \\\"A001\\\", \\\"first_name\\\": \\\"Omar\\\", \\\"last_name\\\": \\\"Stone\\\", \\\"title\\\": \\\"Revenue Operations Lead\\\", \\\"email\\\": \\\"omar.stone@acmecorp.example.com\\\", \\\"is_primary\\\": true, \\\"relationship_status\\\": \\\"engaged\\\"}, {\\\"contact_id\\\": \\\"P0002\\\", \\\"account_id\\\": \\\"A001\\\", \\\"first_name\\\": \\\"Lena\\\", \\\"last_name\\\": \\\"Davis\\\", \\\"title\\\": \\\"Procurement Manager\\\", \\\"email\\\": \\\"lena.davis@acmecorp.example.com\\\", \\\"is_primary\\\": false, \\\"relationship_status\\\": \\\"engaged\\\"}, {\\\"contact_id\\\": \\\"P0003\\\", \\\"account_id\\\": \\\"A001\\\", \\\"first_name\\\": \\\"Taylor\\\", \\\"last_name\\\": \\\"Brown\\\", \\\"title\\\": \\\"Revenue Operations Lead\\\", \\\"email\\\": \\\"taylor.brown@acmecorp.example.com\\\", \\\"is_primary\\\": false, \\\"relationship_status\\\": \\\"engaged\\\"}], \\\"opportunities\\\": [{\\\"opportunity_id\\\": \\\"OPP0001\\\", \\\"account_id\\\": \\\"A001\\\", \\\"name\\\": \\\"Acme Corp Initial Conversion\\\", \\\"type\\\": \\\"new_business\\\", \\\"stage\\\": \\\"Closed Won\\\", \\\"amount_usd\\\": 750000, \\\"close_date\\\": \\\"2025-02-07\\\", \\\"probability\\\": 100, \\\"next_step\\\": \\\"Customer onboarded\\\", \\\"notes\\\": \\\"Initial opportunity successfully converted into a customer.\\\"}, {\\\"opportunity_id\\\": \\\"OPP0002\\\", \\\"account_id\\\": \\\"A001\\\", \\\"name\\\": \\\"Acme Corp Expansion Opportunity\\\", \\\"type\\\": \\\"expansion\\\", \\\"stage\\\": \\\"Stalled\\\", \\\"amount_usd\\\": 180000, \\\"close_date\\\": \\\"2026-12-27\\\", \\\"probability\\\": 25, \\\"next_step\\\": \\\"Confirm renewal scope\\\", \\\"notes\\\": \\\"Budget timing is a concern.\\\"}, {\\\"opportunity_id\\\": \\\"OPP0003\\\", \\\"account_id\\\": \\\"A001\\\", \\\"name\\\": \\\"Acme Corp Renewal Opportunity\\\", \\\"type\\\": \\\"renewal\\\", \\\"stage\\\": \\\"Qualification\\\", \\\"amount_usd\\\": 50000, \\\"close_date\\\": \\\"2026-09-07\\\", \\\"probability\\\": 35, \\\"next_step\\\": \\\"Executive alignment\\\", \\\"notes\\\": \\\"Requires technical validation.\\\"}, {\\\"opportunity_id\\\": \\\"OPP0004\\\", \\\"account_id\\\": \\\"A001\\\", \\\"name\\\": \\\"Acme Corp Expansion Opportunity\\\", \\\"type\\\": \\\"expansion\\\", \\\"stage\\\": \\\"Qualification\\\", \\\"amount_usd\\\": 120000, \\\"close_date\\\": \\\"2026-10-31\\\", \\\"probability\\\": 35, \\\"next_step\\\": \\\"Confirm renewal scope\\\", \\\"notes\\\": \\\"Decision process is unclear.\\\"}], \\\"activities\\\": [{\\\"activity_id\\\": \\\"ACT0096\\\", \\\"account_id\\\": \\\"A001\\\", \\\"date\\\": \\\"2026-05-05\\\", \\\"type\\\": \\\"meeting\\\", \\\"owner\\\": \\\"Rafael Costa\\\", \\\"summary\\\": \\\"No response to last outreach.\\\", \\\"sentiment\\\": \\\"negative\\\"}, {\\\"activity_id\\\": \\\"ACT0097\\\", \\\"account_id\\\": \\\"A001\\\", \\\"date\\\": \\\"2026-04-02\\\", \\\"type\\\": \\\"email\\\", \\\"owner\\\": \\\"Ethan Miller\\\", \\\"summary\\\": \\\"Stakeholder asked for customer references.\\\", \\\"sentiment\\\": \\\"negative\\\"}, {\\\"activity_id\\\": \\\"ACT0098\\\", \\\"account_id\\\": \\\"A001\\\", \\\"date\\\": \\\"2026-04-07\\\", \\\"type\\\": \\\"meeting\\\", \\\"owner\\\": \\\"Ethan Miller\\\", \\\"summary\\\": \\\"No response to last outreach.\\\", \\\"sentiment\\\": \\\"positive\\\"}, {\\\"activity_id\\\": \\\"ACT0099\\\", \\\"account_id\\\": \\\"A001\\\", \\\"date\\\": \\\"2026-02-15\\\", \\\"type\\\": \\\"call\\\", \\\"owner\\\": \\\"Ethan Miller\\\", \\\"summary\\\": \\\"Stakeholder asked for customer references.\\\", \\\"sentiment\\\": \\\"neutral\\\"}], \\\"support_tickets\\\": [], \\\"product_usage\\\": [{\\\"usage_id\\\": \\\"U0001\\\", \\\"account_id\\\": \\\"A001\\\", \\\"period\\\": \\\"2026-04\\\", \\\"active_users\\\": 343, \\\"monthly_logins\\\": 2614, \\\"usage_trend\\\": \\\"up\\\", \\\"feature_adoption_score\\\": 21}]}}\"]"
+      }
+    },
+    {
+      "sequence": 5,
+      "timestamp": "2026-10-14T04:31:17.545121+00:00",
+      "kind": "guardrail_decision",
+      "data": {
+        "layer": "output",
+        "status": "allowed",
+        "reason": "salesops_allowed",
+        "policy": "salesops-data-access-v1"
+      }
+    }
+  ],
+  "final_status": "success",
+  "final_output": "[\"{\\\"status\\\": \\\"success\\\", \\\"reason\\\": \\\"\\\", \\\"data\\\": {\\\"account\\\": {\\\"account_id\\\": \\\"A001\\\", \\\"name\\\": \\\"Acme Corp\\\", \\\"account_status\\\": \\\"customer\\\", \\\"segment\\\": \\\"Strategic\\\", \\\"industry\\\": \\\"Manufacturing\\\", \\\"region\\\": \\\"North America\\\", \\\"account_owner\\\": \\\"Maya Chen\\\", \\\"health_score\\\": 72, \\\"contract_start\\\": \\\"2025-06-01\\\", \\\"contract_end\\\": \\\"2026-08-31\\\", \\\"arr_usd\\\": 750000, \\\"notes\\\": \\\"Strategic account. Expansion interest from operations team.\\\"}, \\\"contacts\\\": [{\\\"contact_id\\\": \\\"P0001\\\", \\\"account_id\\\": \\\"A001\\\", \\\"first_name\\\": \\\"Omar\\\", \\\"last_name\\\": \\\"Stone\\\", \\\"title\\\": \\\"Revenue Operations Lead\\\", \\\"email\\\": \\\"omar.stone@acmecorp.example.com\\\", \\\"is_primary\\\": true, \\\"relationship_status\\\": \\\"engaged\\\"}, {\\\"contact_id\\\": \\\"P0002\\\", \\\"account_id\\\": \\\"A001\\\", \\\"first_name\\\": \\\"Lena\\\", \\\"last_name\\\": \\\"Davis\\\", \\\"title\\\": \\\"Procurement Manager\\\", \\\"email\\\": \\\"lena.davis@acmecorp.example.com\\\", \\\"is_primary\\\": false, \\\"relationship_status\\\": \\\"engaged\\\"}, {\\\"contact_id\\\": \\\"P0003\\\", \\\"account_id\\\": \\\"A001\\\", \\\"first_name\\\": \\\"Taylor\\\", \\\"last_name\\\": \\\"Brown\\\", \\\"title\\\": \\\"Revenue Operations Lead\\\", \\\"email\\\": \\\"taylor.brown@acmecorp.example.com\\\", \\\"is_primary\\\": false, \\\"relationship_status\\\": \\\"engaged\\\"}], \\\"opportunities\\\": [{\\\"opportunity_id\\\": \\\"OPP0001\\\", \\\"account_id\\\": \\\"A001\\\", \\\"name\\\": \\\"Acme Corp Initial Conversion\\\", \\\"type\\\": \\\"new_business\\\", \\\"stage\\\": \\\"Closed Won\\\", \\\"amount_usd\\\": 750000, \\\"close_date\\\": \\\"2025-02-07\\\", \\\"probability\\\": 100, \\\"next_step\\\": \\\"Customer onboarded\\\", \\\"notes\\\": \\\"Initial opportunity successfully converted into a customer.\\\"}, {\\\"opportunity_id\\\": \\\"OPP0002\\\", \\\"account_id\\\": \\\"A001\\\", \\\"name\\\": \\\"Acme Corp Expansion Opportunity\\\", \\\"type\\\": \\\"expansion\\\", \\\"stage\\\": \\\"Stalled\\\", \\\"amount_usd\\\": 180000, \\\"close_date\\\": \\\"2026-12-27\\\", \\\"probability\\\": 25, \\\"next_step\\\": \\\"Confirm renewal scope\\\", \\\"notes\\\": \\\"Budget timing is a concern.\\\"}, {\\\"opportunity_id\\\": \\\"OPP0003\\\", \\\"account_id\\\": \\\"A001\\\", \\\"name\\\": \\\"Acme Corp Renewal Opportunity\\\", \\\"type\\\": \\\"renewal\\\", \\\"stage\\\": \\\"Qualification\\\", \\\"amount_usd\\\": 50000, \\\"close_date\\\": \\\"2026-09-07\\\", \\\"probability\\\": 35, \\\"next_step\\\": \\\"Executive alignment\\\", \\\"notes\\\": \\\"Requires technical validation.\\\"}, {\\\"opportunity_id\\\": \\\"OPP0004\\\", \\\"account_id\\\": \\\"A001\\\", \\\"name\\\": \\\"Acme Corp Expansion Opportunity\\\", \\\"type\\\": \\\"expansion\\\", \\\"stage\\\": \\\"Qualification\\\", \\\"amount_usd\\\": 120000, \\\"close_date\\\": \\\"2026-10-31\\\", \\\"probability\\\": 35, \\\"next_step\\\": \\\"Confirm renewal scope\\\", \\\"notes\\\": \\\"Decision process is unclear.\\\"}], \\\"activities\\\": [{\\\"activity_id\\\": \\\"ACT0096\\\", \\\"account_id\\\": \\\"A001\\\", \\\"date\\\": \\\"2026-05-05\\\", \\\"type\\\": \\\"meeting\\\", \\\"owner\\\": \\\"Rafael Costa\\\", \\\"summary\\\": \\\"No response to last outreach.\\\", \\\"sentiment\\\": \\\"negative\\\"}, {\\\"activity_id\\\": \\\"ACT0097\\\", \\\"account_id\\\": \\\"A001\\\", \\\"date\\\": \\\"2026-04-02\\\", \\\"type\\\": \\\"email\\\", \\\"owner\\\": \\\"Ethan Miller\\\", \\\"summary\\\": \\\"Stakeholder asked for customer references.\\\", \\\"sentiment\\\": \\\"negative\\\"}, {\\\"activity_id\\\": \\\"ACT0098\\\", \\\"account_id\\\": \\\"A001\\\", \\\"date\\\": \\\"2026-04-07\\\", \\\"type\\\": \\\"meeting\\\", \\\"owner\\\": \\\"Ethan Miller\\\", \\\"summary\\\": \\\"No response to last outreach.\\\", \\\"sentiment\\\": \\\"positive\\\"}, {\\\"activity_id\\\": \\\"ACT0099\\\", \\\"account_id\\\": \\\"A001\\\", \\\"date\\\": \\\"2026-02-15\\\", \\\"type\\\": \\\"call\\\", \\\"owner\\\": \\\"Ethan Miller\\\", \\\"summary\\\": \\\"Stakeholder asked for customer references.\\\", \\\"sentiment\\\": \\\"neutral\\\"}], \\\"support_tickets\\\": [], \\\"product_usage\\\": [{\\\"usage_id\\\": \\\"U0001\\\", \\\"account_id\\\": \\\"A001\\\", \\\"period\\\": \\\"2026-04\\\", \\\"active_users\\\": 343, \\\"monthly_logins\\\": 2614, \\\"usage_trend\\\": \\\"up\\\", \\\"feature_adoption_score\\\": 21}]}}\"]",
+  "hitl_decision": null
+}

@@ -1,4 +1,5 @@
-*   918fb2f (HEAD -> codex/agentops-10-submission-package, origin/main, origin/HEAD) Merge pull request #9 from marttp/codex/agentops-09-state-isolation
+* b3f96c9 (HEAD -> codex/agentops-10-submission-package, origin/codex/agentops-10-submission-package) AgentOps: package verified local workflow and document rubric evidence and production limits
+*   918fb2f (origin/main, origin/HEAD) Merge pull request #9 from marttp/codex/agentops-09-state-isolation
 |\  
 | * 4b54bdf (origin/codex/agentops-09-state-isolation, codex/agentops-09-state-isolation) AgentOps: persist authenticated sessions and replay history with user-scoped memory isolation
 |/  
