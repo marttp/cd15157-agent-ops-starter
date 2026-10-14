@@ -1,0 +1,13 @@
+version: config-v2
+model: gpt-4o-mini
+provider: vocareum
+temperature: 0
+request_timeout_s: 45
+max_model_calls: 8
+reference_date: '2026-05-20'
+prompt: prompts/system_v2.md
+data_dir: data
+output_dir: .
+input_usd_per_million: 0.15
+output_usd_per_million: 0.60
+price_version: illustrative-gpt4o-mini-v1
