@@ -1,0 +1,128 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "timestamp": {
+      "title": "Timestamp",
+      "type": "string"
+    },
+    "user_input": {
+      "title": "User Input",
+      "type": "string"
+    },
+    "task_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Task Id"
+    },
+    "final_status": {
+      "title": "Final Status",
+      "type": "string"
+    },
+    "tools_called": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Tools Called",
+      "type": "array"
+    },
+    "tools_attempted": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Tools Attempted",
+      "type": "array"
+    },
+    "latency_s": {
+      "title": "Latency S",
+      "type": "number"
+    },
+    "estimated_cost_usd": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Estimated Cost Usd"
+    },
+    "usage": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Usage"
+    },
+    "guardrail_interventions": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Guardrail Interventions",
+      "type": "array"
+    },
+    "hitl_decision": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Hitl Decision"
+    },
+    "failure_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Failure Reason"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "title": "Metadata",
+      "type": "object"
+    }
+  },
+  "required": [
+    "run_id",
+    "timestamp",
+    "user_input",
+    "final_status",
+    "tools_called",
+    "tools_attempted",
+    "latency_s",
+    "estimated_cost_usd",
+    "usage",
+    "guardrail_interventions",
+    "metadata"
+  ],
+  "title": "RunRecord",
+  "type": "object"
+}
