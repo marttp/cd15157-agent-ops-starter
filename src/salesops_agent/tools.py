@@ -1,5 +1,6 @@
 from pydantic import ValidationError
 from .schemas import Contract, Email, ToolResult
+from .guardrails import tool_arguments_policy, sanitize
 
 
 class AccountArgs(Contract):
@@ -32,6 +33,9 @@ class Dispatcher:
             args = self.contracts[name].model_validate(arguments)
         except ValidationError:
             return self.block(name, "invalid_tool_arguments")
+        decision = tool_arguments_policy(arguments)
+        if decision.status == "blocked":
+            return self.block(name, decision.reason)
         try:
             if name == "lookup_account_context":
                 data = self.crm.context(args.account)
@@ -45,7 +49,7 @@ class Dispatcher:
                 result = self.emails.finalize(args)
                 self.emit("tool_result", {"name": name, "result": result})
                 return result
-            result = ToolResult(status="success", data=data).model_dump()
+            result = ToolResult(status="success", data=sanitize(data)).model_dump()
             self.emit("tool_result", {"name": name, "result": result})
             return result
         except (ValueError, KeyError):
