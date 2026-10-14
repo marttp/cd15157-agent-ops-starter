@@ -1,0 +1,61 @@
+{
+  "run_id": "f5a2a029-1be3-4bca-be8a-247ec5457ba5",
+  "timestamp": "2026-10-14T04:49:33.640419+00:00",
+  "input": "[REDACTED: restricted content]",
+  "metadata": {
+    "git_commit": "84685b7a4da15cfd286445540c6379eeeb27dbd1",
+    "config_version": "config-v2",
+    "config_sha256": "e63163cf081c6cdf3068c322c10ca72459a92b96b1720558ad9ea10cd6f03667",
+    "prompt_sha256": "a3925093d89ead5264cee0a5b570d38faf39495ede8971250faa0472c519ed36",
+    "prompt_version": "system-v2",
+    "effective_config": {
+      "version": "config-v2",
+      "model": "gpt-4o-mini",
+      "provider": "vocareum",
+      "temperature": 0.0,
+      "request_timeout_s": 45.0,
+      "max_model_calls": 8,
+      "reference_date": "2026-05-20",
+      "prompt": "prompts/system_v2.md",
+      "data_dir": "data",
+      "output_dir": ".",
+      "input_usd_per_million": 0.15,
+      "output_usd_per_million": 0.6,
+      "price_version": "illustrative-gpt4o-mini-v1"
+    },
+    "schema_version": "schemas-v1",
+    "tool_version": "tools-v1",
+    "dataset_sha256": {
+      "accounts.json": "3b25bedd5698de4d51e94a0b8a0c72193ba69d5365b6e49c2d295e70abbe8224",
+      "activities.json": "6600aead5973fb3ca9d0e07f24c34d68a92e4e9efca462f85817e5f34fbf300f",
+      "contacts.json": "8167cb7276f7afec06440e73dd34d4d57c8b0f636c254afffce3947a76f115e2",
+      "email_outbox.json": "4c91fef9d6c3bc55f9e4d8db3294f7c155697da57dd74e147ca960232aa5adc8",
+      "internal_financial_data.json": "d8e20c9b5a1878e06b9984c9dc567b57e9971d3438162a1563c15e088357c750",
+      "internal_hr_data.json": "c60692898d5547e28ed517e08441a4ab4c4c5d65a5eb957675e86d31e948443e",
+      "opportunities.json": "5314f8046b3be105658ac8d3f0d73fb0636c943c9ad4657e1f67890654c129d4",
+      "product_usage.json": "3fc2f1e1df6568022b8eae9fa9061cba4944dd74c1f4fe987e822cafe73742ce",
+      "support_tickets.json": "59b5c60672a3c36e05cc616f3c05b7aa89ed0b3c16be5f2f8b5eba2f3c49aca7"
+    },
+    "provider": "vocareum",
+    "model": "gpt-4o-mini",
+    "reference_date": "2026-05-20",
+    "price_version": "illustrative-gpt4o-mini-v1",
+    "execution_mode": "scripted"
+  },
+  "events": [
+    {
+      "sequence": 0,
+      "timestamp": "2026-10-14T04:49:33.640581+00:00",
+      "kind": "guardrail",
+      "data": {
+        "layer": "input",
+        "status": "blocked",
+        "reason": "executive_compensation",
+        "policy": "salesops-data-access-v1"
+      }
+    }
+  ],
+  "final_status": "blocked",
+  "final_output": "Request blocked by SalesOps policy.",
+  "hitl_decision": null
+}

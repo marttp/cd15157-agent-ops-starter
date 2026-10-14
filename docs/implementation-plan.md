@@ -1,6 +1,6 @@
 # AgentOps final project implementation plan
 
-Status: required local implementation and optional authenticated SQLite memory are implemented through focused PRs. Offline verification passes; live provider/prototype evidence remains pending. See docs/rubric-audit.md for current status.
+Status: required local implementation and optional authenticated SQLite memory are implemented through focused PRs. Offline and live verification pass; all required rubric rows have observed evidence. See docs/rubric-audit.md for current status.
 
 Fork: https://github.com/marttp/cd15157-agent-ops-starter
 
@@ -74,8 +74,8 @@ src/salesops_agent/
   data_access.py, tools.py, policies.py, guardrails.py
   sandbox.py, approvals.py, email_service.py
   logging.py, tracing.py, evaluation.py, monitoring.py
-prompts/system_v1.md
-config/agent_v1.yaml
+prompts/system_v2.md
+config/agent_v2.yaml
 schemas/                         # versioned public JSON contracts
 evaluation/scenarios.json        # expectations and assertion types
 tests/                          # behavior and boundary tests

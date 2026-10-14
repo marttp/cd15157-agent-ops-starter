@@ -1,0 +1,23 @@
+[
+  {
+    "approval": null,
+    "exit_code": 0,
+    "run_id": "03180442-2518-4807-8fee-7104737c0b7e",
+    "status": "pending_approval",
+    "outbox_count": 0
+  },
+  {
+    "approval": "approve",
+    "exit_code": 0,
+    "run_id": "55b6012c-f3ce-4f77-ae5b-98752f32355a",
+    "status": "success",
+    "outbox_count": 1
+  },
+  {
+    "approval": "reject",
+    "exit_code": 0,
+    "run_id": "f56896ab-f2dd-427f-997c-2e3ea14a81e4",
+    "status": "rejected",
+    "outbox_count": 0
+  }
+]
