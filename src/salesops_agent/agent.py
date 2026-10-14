@@ -53,7 +53,7 @@ def build_graph(model, dispatcher, ctx, cfg, prompt):
     return graph.compile(checkpointer=InMemorySaver())
 
 
-def run_agent(question, config=None, output=None, model=None, task_id=None, approval=None):
+def run_agent(question, config=None, output=None, model=None, task_id=None, approval=None, principal=None, session_id=None):
     cfg, root = load_settings(config)
     ctx = RunContext(output or root / cfg.output_dir, question, metadata(cfg, root), task_id, sanitizer=sanitize)
     ctx.metadata["execution_mode"] = "scripted" if model is not None else "live"
@@ -63,20 +63,27 @@ def run_agent(question, config=None, output=None, model=None, task_id=None, appr
             ctx.emit("guardrail", {"layer": "input", **decision.model_dump()})
             return ctx.finish("blocked", "Request blocked by SalesOps policy.", cfg, decision.reason)
         ctx.emit("guardrail_decision", {"layer": "input", **decision.model_dump()})
+        prior = []
+        if session_id:
+            if principal is None:
+                raise ValueError("authenticated_principal_required")
+            prior = principal.store.messages(principal, session_id)
+            ctx.metadata.update({"user_id": principal.user_id, "session_id": session_id,
+                                 "thread_id": f"{principal.user_id}:{session_id}"})
         crm = CRM(root / cfg.data_dir)
         emails = EmailService(ctx.output / "state/outbox.db", crm, ApprovalGate(ctx))
         dispatcher = Dispatcher(crm, emails, ctx.emit)
         model = model or make_model(cfg)
         graph = build_graph(model, dispatcher, ctx, cfg,
                             (root / cfg.prompt).read_text()+f"\nReference date: {cfg.reference_date}")
-        result = graph.invoke({"messages": [HumanMessage(question)], "calls": 0},
-                              {"configurable": {"thread_id": ctx.run_id}, "recursion_limit": 50})
+        result = graph.invoke({"messages": [*prior, HumanMessage(question)], "calls": 0},
+                              {"configurable": {"thread_id": ctx.metadata.get("thread_id", ctx.run_id)}, "recursion_limit": 50})
         while result.get("__interrupt__"):
             pending = result["__interrupt__"][0].value
             if approval is None:
                 return ctx.finish("pending_approval", "Approval required: " + json.dumps(pending), cfg)
             result = graph.invoke(Command(resume={"action_id": pending["action_id"], "decision": approval}),
-                                  {"configurable": {"thread_id": ctx.run_id}, "recursion_limit": 50})
+                                  {"configurable": {"thread_id": ctx.metadata.get("thread_id", ctx.run_id)}, "recursion_limit": 50})
         answer = result["messages"][-1].content
         decision = output_policy(answer)
         if decision.status == "blocked":
@@ -89,6 +96,10 @@ def run_agent(question, config=None, output=None, model=None, task_id=None, appr
             status, failure = "failed", "tool_failure"
         if ctx.hitl_decision == "reject" and status == "success":
             status, failure = "rejected", "human_rejected"
+        if session_id and status == "success":
+            ctx.persist(status, answer)
+            trace = json.loads((ctx.output / "traces" / f"{ctx.run_id}.json").read_text())
+            principal.store.record(principal, session_id, {"run_id": ctx.run_id, "answer": sanitize(answer)}, trace)
         return ctx.finish(status, answer, cfg, failure)
     except Exception as error:
         ctx.usage_complete = False
