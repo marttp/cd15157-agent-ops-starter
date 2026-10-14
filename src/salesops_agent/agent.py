@@ -8,6 +8,7 @@ from .data_access import CRM
 from .email_service import EmailService
 from .tools import Dispatcher
 from .run_context import RunContext
+from .guardrails import input_policy, output_policy, sanitize
 
 
 class State(TypedDict):
@@ -50,8 +51,13 @@ def build_graph(model, dispatcher, ctx, cfg, prompt):
 
 def run_agent(question, config=None, output=None, model=None, task_id=None, approval=None):
     cfg, root = load_settings(config)
-    ctx = RunContext(output or root / cfg.output_dir, question, metadata(cfg, root), task_id)
+    ctx = RunContext(output or root / cfg.output_dir, question, metadata(cfg, root), task_id, sanitizer=sanitize)
     try:
+        decision = input_policy(question)
+        if decision.status == "blocked":
+            ctx.emit("guardrail", {"layer": "input", **decision.model_dump()})
+            return ctx.finish("blocked", "Request blocked by SalesOps policy.", cfg, decision.reason)
+        ctx.emit("guardrail_decision", {"layer": "input", **decision.model_dump()})
         crm = CRM(root / cfg.data_dir)
         emails = EmailService(ctx.output / "state/outbox.db", crm)
         dispatcher = Dispatcher(crm, emails, ctx.emit)
@@ -61,8 +67,16 @@ def run_agent(question, config=None, output=None, model=None, task_id=None, appr
         result = graph.invoke({"messages": [HumanMessage(question)], "calls": 0},
                               {"configurable": {"thread_id": ctx.run_id}, "recursion_limit": 50})
         answer = result["messages"][-1].content
+        decision = output_policy(answer)
+        if decision.status == "blocked":
+            ctx.emit("guardrail", {"layer": "output", **decision.model_dump()})
+            return ctx.finish("blocked", "Generated response blocked by SalesOps policy.", cfg, decision.reason)
+        ctx.emit("guardrail_decision", {"layer": "output", **decision.model_dump()})
         status = "blocked" if any(e["kind"] == "guardrail" for e in ctx.events) else "success"
-        return ctx.finish(status, answer, cfg)
+        failure = next((e["data"]["reason"] for e in ctx.events if e["kind"] == "guardrail"), None)
+        if any(e["kind"] == "tool_result" and e["data"]["result"]["status"] == "failed" for e in ctx.events):
+            status, failure = "failed", "tool_failure"
+        return ctx.finish(status, answer, cfg, failure)
     except Exception as error:
         ctx.usage_complete = False
         reason = str(error) if str(error) in {"provider_credentials_missing", "model_call_limit"} else type(error).__name__
