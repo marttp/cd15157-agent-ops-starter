@@ -9,6 +9,8 @@ from .email_service import EmailService
 from .tools import Dispatcher
 from .run_context import RunContext
 from .guardrails import input_policy, output_policy, sanitize
+from .approvals import ApprovalGate
+from langgraph.types import Command
 
 
 class State(TypedDict):
@@ -59,13 +61,19 @@ def run_agent(question, config=None, output=None, model=None, task_id=None, appr
             return ctx.finish("blocked", "Request blocked by SalesOps policy.", cfg, decision.reason)
         ctx.emit("guardrail_decision", {"layer": "input", **decision.model_dump()})
         crm = CRM(root / cfg.data_dir)
-        emails = EmailService(ctx.output / "state/outbox.db", crm)
+        emails = EmailService(ctx.output / "state/outbox.db", crm, ApprovalGate(ctx))
         dispatcher = Dispatcher(crm, emails, ctx.emit)
         model = model or make_model(cfg)
         graph = build_graph(model, dispatcher, ctx, cfg,
                             (root / cfg.prompt).read_text()+f"\nReference date: {cfg.reference_date}")
         result = graph.invoke({"messages": [HumanMessage(question)], "calls": 0},
                               {"configurable": {"thread_id": ctx.run_id}, "recursion_limit": 50})
+        while result.get("__interrupt__"):
+            pending = result["__interrupt__"][0].value
+            if approval is None:
+                return ctx.finish("pending_approval", "Approval required: " + json.dumps(pending), cfg)
+            result = graph.invoke(Command(resume={"action_id": pending["action_id"], "decision": approval}),
+                                  {"configurable": {"thread_id": ctx.run_id}, "recursion_limit": 50})
         answer = result["messages"][-1].content
         decision = output_policy(answer)
         if decision.status == "blocked":
@@ -76,6 +84,8 @@ def run_agent(question, config=None, output=None, model=None, task_id=None, appr
         failure = next((e["data"]["reason"] for e in ctx.events if e["kind"] == "guardrail"), None)
         if any(e["kind"] == "tool_result" and e["data"]["result"]["status"] == "failed" for e in ctx.events):
             status, failure = "failed", "tool_failure"
+        if ctx.hitl_decision == "reject" and status == "success":
+            status, failure = "rejected", "human_rejected"
         return ctx.finish(status, answer, cfg, failure)
     except Exception as error:
         ctx.usage_complete = False

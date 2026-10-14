@@ -58,6 +58,8 @@ class Dispatcher:
                 data = self.emails.draft(args.account, args.purpose).model_dump()
             else:
                 result = self.emails.finalize(args)
+                if result["status"] == "blocked":
+                    return self.block(name, result["reason"])
                 self.emit("tool_result", {"name": name, "result": result})
                 return result
             result = ToolResult(status="success", data=sanitize(data)).model_dump()
