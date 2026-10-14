@@ -1,8 +1,9 @@
 import hashlib
 import json
 import sqlite3
-from .schemas import Email
+
 from .guardrails import output_policy
+from .schemas import Email
 
 
 class EmailService:

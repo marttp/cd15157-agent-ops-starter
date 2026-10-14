@@ -1,7 +1,8 @@
 from pydantic import ValidationError
-from .schemas import Contract, Email, ToolResult
-from .guardrails import tool_arguments_policy, sanitize
+
+from .guardrails import sanitize, tool_arguments_policy
 from .sandbox import run_sandboxed
+from .schemas import Contract, Email, ToolResult
 
 
 class AccountArgs(Contract):

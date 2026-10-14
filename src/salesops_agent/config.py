@@ -2,9 +2,11 @@ import hashlib
 import os
 import subprocess
 from pathlib import Path
-from pydantic import Field
-from dotenv import load_dotenv
+
 import yaml
+from dotenv import load_dotenv
+from pydantic import Field
+
 from .schemas import Contract
 
 
@@ -42,7 +44,7 @@ def metadata(cfg, root):
     return {"git_commit": commit, "config_version": cfg.version,
             "config_sha256": digest(root / "config/agent_v1.yaml"),
             "prompt_sha256": digest(root / cfg.prompt), "prompt_version": "system-v1",
-            "schema_version": "schemas-v1", "tool_version": "tools-v1",
+            "effective_config": cfg.model_dump(), "schema_version": "schemas-v1", "tool_version": "tools-v1",
             "dataset_sha256": {p.name: digest(p) for p in sorted((root / cfg.data_dir).glob("*.json"))},
             "provider": os.getenv("LLM_PROVIDER", cfg.provider), "model": cfg.model,
             "reference_date": cfg.reference_date, "price_version": cfg.price_version}

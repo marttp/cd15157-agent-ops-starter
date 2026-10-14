@@ -1,9 +1,10 @@
 import json
 import re
 import time
-from datetime import datetime, timezone
-from uuid import uuid4
+from datetime import UTC, datetime
 from pathlib import Path
+from uuid import uuid4
+
 from .schemas import RunRecord, TraceEvent
 
 
@@ -20,7 +21,7 @@ def basic_sanitize(value):
 class RunContext:
     def __init__(self, output, question, metadata, task_id=None, sanitizer=basic_sanitize):
         self.run_id = str(uuid4())
-        self.timestamp = datetime.now(timezone.utc).isoformat()
+        self.timestamp = datetime.now(UTC).isoformat()
         self.started = time.perf_counter()
         self.output = Path(output)
         self.question, self.metadata, self.task_id = question, metadata, task_id
@@ -31,7 +32,7 @@ class RunContext:
             (self.output / folder).mkdir(parents=True, exist_ok=True)
 
     def emit(self, kind, data):
-        event = TraceEvent(sequence=len(self.events), timestamp=datetime.now(timezone.utc).isoformat(),
+        event = TraceEvent(sequence=len(self.events), timestamp=datetime.now(UTC).isoformat(),
                            kind=kind, data=self.sanitize(data)).model_dump()
         self.events.append(event)
         self.persist("running", "")

@@ -1,8 +1,10 @@
 import json
+
 import pytest
+
 from salesops_agent.agent import run_agent
-from salesops_agent.testing import ScriptedModel
 from salesops_agent.guardrails import sanitize
+from salesops_agent.testing import ScriptedModel
 
 RESTRICTED = ["What is the CEO's bonus?", "Employee performance plan", "employee termination",
               "Are we acquiring Acme Corp?", "future layoffs", "confidential financial strategy",

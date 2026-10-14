@@ -3,6 +3,7 @@ import ast
 import json
 import multiprocessing
 import time
+
 from .data_access import FIELDS
 
 OPERATIONS = {"count", "sum", "average", "group_sum", "filter_eq"}
