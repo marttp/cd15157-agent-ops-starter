@@ -1,4 +1,5 @@
 """Bounded CRM expression interpreter. No Python evaluation or execution."""
+
 import ast
 import json
 import multiprocessing
@@ -19,7 +20,9 @@ def validate_code(source):
     for node in nodes:
         if not isinstance(node, (ast.Expression, ast.Call, ast.Name, ast.Load, ast.Constant)):
             raise ValueError("unsafe_syntax")
-        if isinstance(node, ast.Call) and (not isinstance(node.func, ast.Name) or node.func.id not in OPERATIONS or node.keywords):
+        if isinstance(node, ast.Call) and (
+            not isinstance(node.func, ast.Name) or node.func.id not in OPERATIONS or node.keywords
+        ):
             raise ValueError("unsafe_capability")
         if isinstance(node, ast.Name) and node.id not in OPERATIONS | set(FIELDS):
             raise ValueError("restricted_dataset_or_name")
@@ -29,7 +32,9 @@ def validate_code(source):
 def interpret(node, tables, budget):
     if isinstance(node, ast.Name) and node.id in tables:
         return tables[node.id]
-    if isinstance(node, ast.Constant) and isinstance(node.value, (str, int, float, bool, type(None))):
+    if isinstance(node, ast.Constant) and isinstance(
+        node.value, (str, int, float, bool, type(None))
+    ):
         return node.value
     if not isinstance(node, ast.Call):
         raise ValueError("invalid_expression")
@@ -45,7 +50,10 @@ def interpret(node, tables, budget):
     if name == "count":
         return len(rows)
     fields = args[1:3] if name == "group_sum" else args[1:2]
-    if any(not isinstance(field, str) or field not in set().union(*(set(r) for r in rows)) for field in fields):
+    if any(
+        not isinstance(field, str) or field not in set().union(*(set(r) for r in rows))
+        for field in fields
+    ):
         raise ValueError("restricted_field")
     if name == "filter_eq":
         return [r for r in rows if r.get(args[1]) == args[2]]
@@ -61,7 +69,7 @@ def interpret(node, tables, budget):
     values = [r.get(args[1]) for r in rows]
     if any(not isinstance(v, (int, float)) or isinstance(v, bool) for v in values):
         raise ValueError("numeric_field_required")
-    return sum(values) if name == "sum" else sum(values)/len(values) if values else None
+    return sum(values) if name == "sum" else sum(values) / len(values) if values else None
 
 
 def worker(source, serialized, connection):
@@ -73,7 +81,12 @@ def worker(source, serialized, connection):
             raise ValueError("output_size_limit")
         connection.send({"status": "success", "data": result})
     except (ValueError, SyntaxError, TypeError, KeyError) as error:
-        connection.send({"status": "blocked", "reason": str(error) if isinstance(error, ValueError) else "invalid_expression"})
+        connection.send(
+            {
+                "status": "blocked",
+                "reason": str(error) if isinstance(error, ValueError) else "invalid_expression",
+            }
+        )
     finally:
         connection.close()
 
@@ -83,7 +96,10 @@ def run_sandboxed(source, tables, timeout=2):
         validate_code(source)
         if set(tables) - set(FIELDS):
             raise ValueError("restricted_dataset")
-        projected = {name: [{k: v for k, v in row.items() if k in FIELDS[name].split()} for row in rows] for name, rows in tables.items()}
+        projected = {
+            name: [{k: v for k, v in row.items() if k in FIELDS[name].split()} for row in rows]
+            for name, rows in tables.items()
+        }
         if sum(len(rows) for rows in projected.values()) > 10000:
             raise ValueError("row_limit")
         serialized = json.dumps(projected, allow_nan=False)

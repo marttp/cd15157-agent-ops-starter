@@ -10,7 +10,7 @@ def test_aggregation_reconciles_outcomes(tmp_path):
     run_agent("CEO bonus", output=tmp_path, model=ScriptedModel())
     metrics = generate(tmp_path)
     assert metrics["total_runs"] == 2
-    assert metrics["success_rate"] == .5 and metrics["failure_rate"] == 0
+    assert metrics["success_rate"] == 0.5 and metrics["failure_rate"] == 0
     assert metrics["status_counts"]["blocked"] == 1 and metrics["guardrail_blocks"] == 1
     assert metrics["unknown_cost_runs"] == 1 and metrics["known_cost_runs"] == 1
     assert metrics["estimated_total_known_cost_usd"] == 0

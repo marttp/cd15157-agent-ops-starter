@@ -16,7 +16,11 @@ class ApprovalGate:
             self.ctx.emit("approval_requested", pending)
             self.requested.add(action_id)
         response = interrupt(pending)
-        decision = response.get("decision") if isinstance(response, dict) and response.get("action_id") == action_id else "reject"
+        decision = (
+            response.get("decision")
+            if isinstance(response, dict) and response.get("action_id") == action_id
+            else "reject"
+        )
         if decision not in {"approve", "reject"}:
             decision = "reject"
         self.decisions[action_id] = decision

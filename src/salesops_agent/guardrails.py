@@ -5,6 +5,7 @@ from .run_context import basic_sanitize
 from .schemas import Decision
 
 PATTERNS = {
+    "credential_exposure": r"(?:voc-|sk-)[A-Za-z0-9._-]{8,}",
     "executive_compensation": r"\b(?:ceo|cfo|executive)\b.{0,50}\b(?:bonus|pay|salary|compensation|equity)\b|salary_usd|equity_bonus|\bequity bonus\b|\bsalary\b|\bcompensation\b",
     "restricted_hr": r"internal.hr|\bhr data\b|\b(?:employee|staff)\b.{0,40}\b(?:performance|termination|fired|dismiss|pip)\b|\bperformance plan\b|\btermination\b|\bgetting fired\b",
     "confidential_ma": r"\bm\s*&\s*a\b|confidential_m_and_a|\bacquir(?:ing|e)\b|\bmerger\b|\bacquisition details\b",
@@ -13,13 +14,27 @@ PATTERNS = {
     "prompt_injection": r"ignore.{0,30}(?:instructions|polic|rules)|reveal.{0,30}(?:hidden|system|instructions)|system prompt|developer message|override.{0,20}polic|you are now|forget.{0,20}instructions",
     "unsafe_commitment": r"(?:offer|give|apply|invent|approve).{0,30}discount|\d+\s*%\s*discount|\bguarantee\b|legal commitment|binding agreement|we will indemnify",
 }
-SENSITIVE_KEYS = {"salary_usd", "equity_bonus_usd", "internal_hr_data", "internal_financial_data",
-                  "confidential_strategy", "confidential_m_and_a", "confidential_layoff_plan",
-                  "confidential_discount_policy", "performance_plan", "termination", "api_key", "password", "secret"}
+SENSITIVE_KEYS = {
+    "salary_usd",
+    "equity_bonus_usd",
+    "internal_hr_data",
+    "internal_financial_data",
+    "confidential_strategy",
+    "confidential_m_and_a",
+    "confidential_layoff_plan",
+    "confidential_discount_policy",
+    "performance_plan",
+    "termination",
+    "api_key",
+    "password",
+    "secret",
+}
 
 
 def canonical(text):
-    return "".join(c for c in unicodedata.normalize("NFKC", text).casefold() if unicodedata.category(c) != "Cf")
+    return "".join(
+        c for c in unicodedata.normalize("NFKC", text).casefold() if unicodedata.category(c) != "Cf"
+    )
 
 
 def inspect_text(text):
@@ -56,7 +71,10 @@ def output_policy(value):
 
 def sanitize(value):
     if isinstance(value, dict):
-        return {k: "[REDACTED]" if canonical(k) in SENSITIVE_KEYS else sanitize(v) for k, v in value.items()}
+        return {
+            k: "[REDACTED]" if canonical(k) in SENSITIVE_KEYS else sanitize(v)
+            for k, v in value.items()
+        }
     if isinstance(value, list):
         return [sanitize(v) for v in value]
     if isinstance(value, str):

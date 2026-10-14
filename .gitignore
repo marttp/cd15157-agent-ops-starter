@@ -20,3 +20,5 @@ reports/evidence/*
 !reports/evidence/*.md
 build/
 dist/
+evaluation-runs/
+state/

@@ -1,0 +1,41 @@
+*   918fb2f (HEAD -> codex/agentops-10-submission-package, origin/main, origin/HEAD) Merge pull request #9 from marttp/codex/agentops-09-state-isolation
+|\  
+| * 4b54bdf (origin/codex/agentops-09-state-isolation, codex/agentops-09-state-isolation) AgentOps: persist authenticated sessions and replay history with user-scoped memory isolation
+|/  
+*   b469afc Merge pull request #8 from marttp/codex/agentops-08-observability
+|\  
+| * d1ace27 (origin/codex/agentops-08-observability, codex/agentops-08-observability) AgentOps: consolidate redacted traces monitoring metrics and adversarial evaluation evidence
+|/  
+*   ab3e8fd Merge pull request #7 from marttp/codex/agentops-07-approval
+|\  
+| * d882743 (origin/codex/agentops-07-approval, codex/agentops-07-approval) AgentOps: require content-bound approval before customer-facing email finalization and send
+|/  
+*   18e93ee Merge pull request #6 from marttp/codex/agentops-06-sandbox
+|\  
+| * 5d7d540 (origin/codex/agentops-06-sandbox, codex/agentops-06-sandbox) AgentOps: count worker startup against the analysis execution deadline
+| * ad93565 AgentOps: add bounded CRM analysis interpreter with execution limits and capability restrictions
+|/  
+*   4c65136 Merge pull request #5 from marttp/codex/agentops-05-guardrails
+|\  
+| * b756415 (origin/codex/agentops-05-guardrails, codex/agentops-05-guardrails) AgentOps: enforce input tool and output policies with sanitized blocked outcomes
+|/  
+*   ac518d5 Merge pull request #4 from marttp/codex/agentops-04-evaluation
+|\  
+| * fa9d783 (origin/codex/agentops-04-evaluation, codex/agentops-04-evaluation) AgentOps: add LangGraph workflow evaluation scenarios and per-task operational reports
+|/  
+*   5d9b4b4 Merge pull request #3 from marttp/codex/agentops-03-tools
+|\  
+| * fb11d37 (origin/codex/agentops-03-tools, codex/agentops-03-tools) AgentOps: refactor scoped CRM tools and transactional email service behind validated dispatcher
+|/  
+*   5a6037d Merge pull request #2 from marttp/codex/agentops-02-contracts
+|\  
+| * c7590c2 (origin/codex/agentops-02-contracts, codex/agentops-02-contracts) AgentOps: extract versioned prompts configuration and schemas with validated runtime metadata
+|/  
+*   58fe9fc Merge pull request #1 from marttp/codex/agentops-01-scaffold
+|\  
+| * e27dd5f (origin/codex/agentops-01-scaffold, codex/agentops-01-scaffold) AgentOps: scaffold reproducible Python project and preserve starter reference artifacts
+|/  
+* 640790c (upstream/main, upstream/HEAD, main, codex/agentops-project-plan) Updated starter README to have info about what student README should contain.
+* eff46a5 Updated README
+* 632a0df Adding project starter code
+* 49f957e Initial commit

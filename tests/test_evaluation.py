@@ -16,6 +16,7 @@ def test_model_error_is_observable(tmp_path):
     class Broken(ScriptedModel):
         def invoke(self, messages):
             raise TimeoutError("never expose provider body or credentials")
+
     result = run_agent("pipeline", output=tmp_path, model=Broken())
     assert result["status"] == "failed"
     trace = json.loads((tmp_path / "traces" / f"{result['run_id']}.json").read_text())

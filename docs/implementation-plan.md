@@ -1,6 +1,6 @@
 # AgentOps final project implementation plan
 
-Status: planning only. The fork is verified; implementation and rubric validation have not started.
+Status: required local implementation and optional authenticated SQLite memory are implemented through focused PRs. Offline verification passes; live provider/prototype evidence remains pending. See docs/rubric-audit.md for current status.
 
 Fork: https://github.com/marttp/cd15157-agent-ops-starter
 
@@ -146,7 +146,7 @@ Use isolated temporary output directories for tests. Keep selected sanitized obs
 
 ## Rubric evidence matrix
 
-All rows start pending. The final audit expands these groups into individual rubric statements with file references, commands and observed artifacts.
+The detailed audit tracks current verification status. It expands these groups into individual rubric statements with file references, commands and observed artifacts.
 
 | Required criterion | Implementation and verification contract |
 | --- | --- |
@@ -170,7 +170,7 @@ All rows start pending. The final audit expands these groups into individual rub
 4. Reproducibility gate: clean clone, locked sync, documented CLI/evaluation/report commands, correct paths, version metadata and generated history. Package resources must be included if a wheel/container is produced.
 5. Submission gate: one audit row per screenshot/written requirement, each marked verified with evidence. No pending required criterion; known production limitations remain explicit. Publish selected evidence and implementation only after review for secrets and unrelated files.
 
-Planned command contracts, not currently implemented:
+Implemented command contracts:
 
 ```sh
 uv sync --locked
