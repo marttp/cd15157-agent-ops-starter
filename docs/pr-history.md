@@ -21,3 +21,11 @@ PR 6 remained unmerged until its timeout test passed. GitHub briefly rejected me
 an updated PR head; the final head was verified and merged before proceeding. Source
 and remote status are checked separately. Original course repository changes are
 outside this worktree and are not included in the project PRs.
+
+## Live verification PR
+
+PR 11 closes the live evidence gate, corrects the fixture reference date through
+versioned v2 resources, and retains the published v1 baseline. Observed results are
+32/32 full evaluation cases, no regressions, 43 original notebook code cells, five
+additional live CLI checks and 37 reconciled log/trace pairs. Every required audit
+row now has evidence. The source correction adds the 54th engineering check.

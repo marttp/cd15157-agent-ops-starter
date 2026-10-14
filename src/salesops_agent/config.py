@@ -28,7 +28,7 @@ class Settings(Contract):
 
 
 def load_settings(path=None):
-    path = Path(path or "config/agent_v1.yaml").resolve()
+    path = Path(path or "config/agent_v2.yaml").resolve()
     cfg = Settings.model_validate(yaml.safe_load(path.read_text()))
     cfg._source = path
     root = path.parent.parent
@@ -52,7 +52,7 @@ def metadata(cfg, root):
         "config_version": cfg.version,
         "config_sha256": digest(cfg._source),
         "prompt_sha256": digest(root / cfg.prompt),
-        "prompt_version": "system-v1",
+        "prompt_version": Path(cfg.prompt).stem.replace("_", "-"),
         "effective_config": cfg.model_dump(),
         "schema_version": "schemas-v1",
         "tool_version": "tools-v1",

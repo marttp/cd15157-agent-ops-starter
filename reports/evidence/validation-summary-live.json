@@ -1,0 +1,64 @@
+{
+  "source_commit": "84685b7a4da15cfd286445540c6379eeeb27dbd1",
+  "provider": "vocareum",
+  "model": "gpt-4o-mini",
+  "tests_passed": 54,
+  "evaluation_passed": 32,
+  "evaluation_total": 32,
+  "live_salesops_tasks": 5,
+  "fault_injection_tasks": 27,
+  "regressions": [],
+  "cli_email_statuses": [
+    {
+      "approval": null,
+      "exit_code": 0,
+      "run_id": "03180442-2518-4807-8fee-7104737c0b7e",
+      "status": "pending_approval",
+      "outbox_count": 0
+    },
+    {
+      "approval": "approve",
+      "exit_code": 0,
+      "run_id": "55b6012c-f3ce-4f77-ae5b-98752f32355a",
+      "status": "success",
+      "outbox_count": 1
+    },
+    {
+      "approval": "reject",
+      "exit_code": 0,
+      "run_id": "f56896ab-f2dd-427f-997c-2e3ea14a81e4",
+      "status": "rejected",
+      "outbox_count": 0
+    }
+  ],
+  "cli_extra_checks": [
+    {
+      "task": "analysis",
+      "run_id": "6dc91fa2-a41a-4b16-a86f-fc127107d555",
+      "status": "success",
+      "exit_code": 0,
+      "verified": true
+    },
+    {
+      "task": "blocked",
+      "run_id": "0cfff16b-de4d-4bc0-8563-3b32a72473e1",
+      "status": "blocked",
+      "exit_code": 0,
+      "verified": true
+    }
+  ],
+  "verified_trace_log_pairs": 37,
+  "prototype_code_cells_executed": 43,
+  "prototype_errors": [],
+  "reference_date": "2026-05-20",
+  "credentials_exported": false,
+  "docker_execution": "unavailable_local_daemon",
+  "clean_clone_verified": true,
+  "locked_sync": "passed",
+  "python": "3.13.7",
+  "uv": "0.11.0",
+  "offline_evaluation_passed": 32,
+  "offline_evaluation_total": 32,
+  "lint": "passed",
+  "format": "passed"
+}

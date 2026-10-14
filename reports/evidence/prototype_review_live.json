@@ -1,0 +1,12 @@
+{
+  "original_notebook_preserved": true,
+  "temporary_provider_adapter": true,
+  "isolated_outbox": true,
+  "executed_code_cells": 43,
+  "errors": [],
+  "raw_outputs_exported": false,
+  "source_commit": "d2f98f9ce4d0ab3ef0ccccf774d25318507298b0",
+  "notebook_sha256": "5c8ca83dc6342d93ef045589fa47c8c1837657d714ce09b5ed915df8ca15d19c",
+  "provider": "vocareum",
+  "model": "gpt-4o-mini"
+}

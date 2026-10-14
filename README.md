@@ -36,7 +36,7 @@ uv run salesops-agent ask "Draft and send a follow-up email to Acme Corp" --appr
 ```
 
 Each `ask` prints a run ID, runtime status and answer. `--output PATH` puts state,
-logs and traces in a separate directory. `--config config/agent_v1.yaml` selects
+logs and traces in a separate directory. `--config config/agent_v2.yaml` selects
 configuration; resource paths are relative to that configuration's project root.
 A provider/runtime failure exits with code 1 and produces debugging artifacts.
 Blocked requests exit normally with an explicit status and reason in the log.
@@ -99,11 +99,12 @@ Optional owned sessions persist sanitized conversation history separately.
 
 ## Versioned components
 
-`prompts/system_v1.md`, `config/agent_v1.yaml`, `schemas/*.json` and tool modules are
+`prompts/system_v2.md`, `config/agent_v2.yaml`, `schemas/*.json` and tool modules are
 separate versioned files. Every run records Git commit, prompt/config hashes,
 dataset hashes, component versions, model/provider and effective settings.
-The fixture reference date is fixed at 2026-03-01. Renewal interpretation is stable
-across runs; it is not a claim about today's customer state. The locked dependencies
+The fixture reference date is fixed at 2026-05-20, after the latest observed activity on May 19. Renewal interpretation is stable
+across runs; it is not a claim about today's customer state. The original v1 prompt/configuration remain as an immutable comparison baseline.
+The locked dependencies
 and explicit settings make the environment reproducible. Temperature zero cannot
 make a hosted model deterministic. `GITLOG.txt` is a generated history snapshot,
 not manually authored commit evidence.
@@ -123,8 +124,8 @@ uv run python scripts/review_prototype.py
 This executes the notebook in a temporary kernel and data copy, including its fake
 outbox. Only the temporary model construction cell adapts the course provider.
 The original notebook is unchanged. Exported evidence records executed cells and
-error types, never raw internal-data outputs. Live prototype execution is currently
-pending provider credentials; source inspection is not reported as execution.
+error types, never raw internal-data outputs. Live execution completed all 43 code
+cells without errors. See `reports/evidence/prototype_review_live.json`.
 
 ## Guardrail design
 
@@ -261,8 +262,11 @@ Container build/run status is recorded separately from local verification.
 
 ## Known limitations and production hardening
 
-Live model behavior and prototype execution require your provider credentials and
-are pending in the current audit. Offline evidence cannot close those rows.
+Live verification passed all 32 cases, including five real Vocareum SalesOps tasks
+and 27 fault-injection cases. The original notebook completed 43 code cells; real
+CLI email approve/reject/pending and constrained analysis checks also passed. See
+`reports/evidence/validation-summary-live.json`. These observed results do not
+guarantee every future model response.
 The system uses mock data, finite lexical policy, illustrative cost rates, bounded
 analysis, local SQLite and simulated approval/delivery. Approval state is in-process;
 session history is durable but not a full durable LangGraph checkpoint service.
